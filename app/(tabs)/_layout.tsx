@@ -47,7 +47,14 @@ export default function TabLayout() {
         name="locationTab"
         options={{
           title: 'Location Tab',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="location-arrow" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="dbTab"
+        options={{
+          title: 'Db Tab',
+          tabBarIcon: ({ color }) => <TabBarIcon name="database" color={color} />,
         }}
       />
     </Tabs>

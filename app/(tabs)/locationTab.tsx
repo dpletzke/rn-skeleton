@@ -27,7 +27,6 @@ export default function LocationScreen() {
         darkColor="rgba(255,255,255,0.1)"
       />
       <Text>{JSON.stringify(location, null, 2)}</Text>
-      <EditScreenInfo path="app/(tabs)/locationTab.tsx" />
     </View>
   );
 }
