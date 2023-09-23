@@ -1,18 +1,33 @@
 import { StyleSheet } from "react-native";
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
+import { useLocation } from "../../hooks/useLocation";
+import { useEffect } from "react";
 
-export default function TabTwoScreen() {
+export default function LocationScreen() {
+  const [location] = useLocation({
+    onPermissionDenied: () => {
+      console.log("Permission denied");
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  useEffect(() => {
+    console.log("Location", location);
+  }, [location]);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
+      <Text style={styles.title}>Location Tab</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-
-      <EditScreenInfo path="app/(tabs)/two.tsx" />
+      <Text>{JSON.stringify(location, null, 2)}</Text>
+      <EditScreenInfo path="app/(tabs)/locationTab.tsx" />
     </View>
   );
 }
