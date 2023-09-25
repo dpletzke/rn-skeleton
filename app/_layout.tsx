@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { ActivityIndicator, View, useColorScheme } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
   DarkTheme,
@@ -9,6 +9,10 @@ import {
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useNotifications } from "../hooks";
+import { AppProvider, UserProvider } from "@realm/react";
+import { RealmProvider } from "../schemas";
+import { appId, baseUrl } from "../atlasConfig.json";
+import Login from "../components/Login";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -28,6 +32,10 @@ export default function RootLayout() {
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
+
+  useEffect(() => {
+    console.log("RootLayout loaded");
+  }, []);
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -49,15 +57,39 @@ export default function RootLayout() {
   return <RootLayoutNav />;
 }
 
+const LoadingIndicator = () => {
+  return (
+    <View>
+      <ActivityIndicator size="large" />
+    </View>
+  );
+};
+
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
-    </ThemeProvider>
+    <AppProvider id={appId} baseUrl={baseUrl}>
+      <UserProvider fallback={Login}>
+        <RealmProvider
+          fallback={LoadingIndicator}
+          sync={{
+            flexible: true,
+            onError: (session, error) => {
+              console.log(error);
+            },
+          }}
+        >
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+            </Stack>
+          </ThemeProvider>
+        </RealmProvider>
+      </UserProvider>
+    </AppProvider>
   );
 }
