@@ -11,7 +11,6 @@ export const useLocation = ({ onPermissionDenied, onError }: Props) => {
   const [location, setLocation] = useState<Location.LocationObject | null>(
     null
   );
-
   useEffect(() => {
     Location.requestForegroundPermissionsAsync()
       .then(({ status }) => {
