@@ -17,7 +17,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.dpletzke.rnskeleton"
+      "bundleIdentifier": "com.dpletzke.rnskeleton",
+      "config": {
+        "googleMapsApiKey": "AIzaSyDKe8zTtcc4ijK31vCVrOb0_-2mg3GggGk"
+      }
     },
     "android": {
       "adaptiveIcon": {
