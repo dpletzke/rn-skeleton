@@ -48,8 +48,16 @@ export async function registerForPushNotificationsAsync() {
   return token;
 }
 
-export const sendOwnNotification = async (
-  details: Notifications.NotificationRequestInput
-) => {
-  return Notifications.scheduleNotificationAsync(details);
+export const sendOwnNotification = async ({
+  trigger,
+  ...rest
+}: {
+  content: Notifications.NotificationContentInput;
+  trigger?: Notifications.NotificationTriggerInput;
+  identifier?: string;
+}) => {
+  return Notifications.scheduleNotificationAsync({
+    trigger: trigger || null,
+    ...rest,
+  });
 };

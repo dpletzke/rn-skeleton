@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { ActivityIndicator, StyleSheet } from "react-native";
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 import { useLocation } from "../../hooks/useLocation";
@@ -14,10 +14,6 @@ export default function LocationScreen() {
     },
   });
 
-  useEffect(() => {
-    console.log("Location", location);
-  }, [location]);
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Location Tab</Text>
@@ -26,7 +22,11 @@ export default function LocationScreen() {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <Text>{JSON.stringify(location, null, 2)}</Text>
+      {location ? (
+        <Text>{JSON.stringify(location, null, 2)}</Text>
+      ) : (
+        <ActivityIndicator size="large" />
+      )}
     </View>
   );
 }

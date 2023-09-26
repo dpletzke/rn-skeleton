@@ -31,8 +31,16 @@ export default function DbScreen() {
           />
         )}
       </Pressable>
-      {ownTasks.map((task) => (
-        <View>
+      {ownTasks.map((task, index) => (
+        <View
+          key={`${task._id}-${index}`}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-around",
+            width: "100%",
+          }}
+        >
           <Text>{task.text}</Text>
           <Pressable onPress={() => deleteTask(task)}>
             {({ pressed }) => (

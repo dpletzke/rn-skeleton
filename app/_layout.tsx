@@ -78,6 +78,12 @@ function RootLayoutNav() {
             onError: (session, error) => {
               console.log(error);
             },
+            initialSubscriptions: {
+              update: (subs, realm) => {
+                subs.add(realm.objects("Task"));
+              },
+              rerunOnOpen: true,
+            },
           }}
         >
           <ThemeProvider
