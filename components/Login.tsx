@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Login(): React.ReactElement {
+export function Login(): React.ReactElement {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
