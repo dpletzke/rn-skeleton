@@ -1,11 +1,11 @@
 import { Pressable, StyleSheet, useColorScheme } from "react-native";
-import { Text, View } from "../../components/Themed";
+import { Text, View } from "../../components";
 import { useDb } from "../../hooks/useDb";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
 
 export default function DbScreen() {
-  const { createTask, deleteTask, ownTasks, user } = useDb();
+  const { user } = useDb();
   const colorScheme = useColorScheme();
 
   return (
@@ -17,43 +17,6 @@ export default function DbScreen() {
         darkColor="rgba(255,255,255,0.1)"
       />
       <Text>User Email: {user.profile.email}</Text>
-      <Pressable
-        onPress={() =>
-          createTask({ text: Math.random().toString(36).slice(2, 7) })
-        }
-      >
-        {({ pressed }) => (
-          <FontAwesome
-            name="plus"
-            size={25}
-            color={Colors[colorScheme ?? "light"].text}
-            style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-          />
-        )}
-      </Pressable>
-      {ownTasks.map((task, index) => (
-        <View
-          key={`${task._id}-${index}`}
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            width: "100%",
-          }}
-        >
-          <Text>{task.text}</Text>
-          <Pressable onPress={() => deleteTask(task)}>
-            {({ pressed }) => (
-              <FontAwesome
-                name="remove"
-                size={25}
-                color={Colors[colorScheme ?? "light"].text}
-                style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-              />
-            )}
-          </Pressable>
-        </View>
-      ))}
     </View>
   );
 }

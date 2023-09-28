@@ -1,6 +1,6 @@
 import { ActivityIndicator, StyleSheet } from "react-native";
 import EditScreenInfo from "../../components/EditScreenInfo";
-import { Text, View } from "../../components/Themed";
+import { Text, View } from "../../components";
 import { useLocation } from "../../hooks/useLocation";
 import { useEffect } from "react";
 

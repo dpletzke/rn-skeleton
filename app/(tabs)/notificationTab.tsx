@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, useColorScheme } from "react-native";
-import { Text, View } from "../../components/Themed";
+import { Text, View } from "../../components";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../../constants/Colors";
 import { sendOwnNotification } from "../../utils/notificationUtils";
