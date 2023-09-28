@@ -1,54 +1,57 @@
 import { useCallback } from "react";
 import { useRealm, useQuery } from "../schemas";
-import { Task } from "../schemas/TaskSchema";
+import { Notifier } from "../schemas/NotifierSchema";
 import { useUser } from "@realm/react";
 import { BSON } from "realm";
 
 export const useDb = () => {
   const realm = useRealm();
   const user = useUser();
-  const ownTasks = useQuery<Task>(
-    "Task",
+  const ownNotifiersResults = useQuery<Notifier>(
+    "Notifier",
     (collection) => collection.filtered("owner_id == $0", user.id),
     [user]
   );
 
-  const createTask = useCallback(
-    ({ text }: { text: string }) => {
+  const createNotifier = useCallback(
+    ({ stationId, threshold }: { stationId: string; threshold: number }) => {
       realm.write(() => {
-        return new Task(realm, {
+        return new Notifier(realm, {
+          threshold,
+          stationId,
           owner_id: user?.id,
-          isCompleted: false,
-          text,
         });
       });
     },
     [realm, user]
   );
 
-  const getTaskById = useCallback(
+  const getNotifierById = useCallback(
     (id: BSON.ObjectId) => {
-      return ownTasks.find((task) => task._id === id);
+      return ownNotifiersResults.find((notifier) => notifier._id === id);
     },
-    [ownTasks]
+    [ownNotifiersResults]
   );
 
-  const editTask = useCallback(
-    (task: Task, edits: Partial<Omit<Task, "_id" | "owner_id">>) => {
+  const editNotifier = useCallback(
+    (
+      notifier: Notifier,
+      edits: Partial<Omit<Notifier, "_id" | "owner_id">>
+    ) => {
       realm.write(() => {
-        if (task.owner_id !== user?.id) {
-          throw new Error("Cannot edit Tasks owned by other users");
+        if (notifier.owner_id !== user?.id) {
+          throw new Error("Cannot edit notifiers owned by other users");
         }
-        Object.assign(task, edits);
+        Object.assign(notifier, edits);
       });
     },
     [realm]
   );
 
-  const deleteTask = useCallback(
-    (Task: Task) => {
+  const deleteNotifier = useCallback(
+    (notifier: Notifier) => {
       realm.write(() => {
-        realm.delete(Task);
+        realm.delete(notifier);
       });
     },
     [realm]
@@ -57,10 +60,10 @@ export const useDb = () => {
   return {
     realm,
     user,
-    ownTasks,
-    getTaskById,
-    createTask,
-    editTask,
-    deleteTask,
+    ownNotifiersResults,
+    getNotifierById,
+    createNotifier,
+    editNotifier,
+    deleteNotifier,
   };
 };
