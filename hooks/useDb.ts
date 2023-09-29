@@ -7,10 +7,11 @@ import { BSON } from "realm";
 export const useDb = () => {
   const realm = useRealm();
   const user = useUser();
+
   const ownNotifiersResults = useQuery<Notifier>(
     "Notifier",
     (collection) => collection.filtered("owner_id == $0", user.id),
-    [user]
+    [user],
   );
 
   const createNotifier = useCallback(
@@ -23,20 +24,20 @@ export const useDb = () => {
         });
       });
     },
-    [realm, user]
+    [realm, user],
   );
 
   const getNotifierById = useCallback(
     (id: BSON.ObjectId) => {
       return ownNotifiersResults.find((notifier) => notifier._id === id);
     },
-    [ownNotifiersResults]
+    [ownNotifiersResults],
   );
 
   const editNotifier = useCallback(
     (
       notifier: Notifier,
-      edits: Partial<Omit<Notifier, "_id" | "owner_id">>
+      edits: Partial<Omit<Notifier, "_id" | "owner_id">>,
     ) => {
       realm.write(() => {
         if (notifier.owner_id !== user?.id) {
@@ -45,7 +46,7 @@ export const useDb = () => {
         Object.assign(notifier, edits);
       });
     },
-    [realm]
+    [realm],
   );
 
   const deleteNotifier = useCallback(
@@ -54,7 +55,7 @@ export const useDb = () => {
         realm.delete(notifier);
       });
     },
-    [realm]
+    [realm],
   );
 
   return {
