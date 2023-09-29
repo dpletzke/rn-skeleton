@@ -1,24 +1,52 @@
 import { StatusBar } from "expo-status-bar";
 import { Platform, Pressable, StyleSheet } from "react-native";
 
-import { StyledButton, Text, View } from "../../components";
-import { Link } from "expo-router";
+import { Button, StyledButton, Text, View } from "../../components";
+import { Link, router } from "expo-router";
+import { useDb } from "../../hooks";
+import { useContext } from "react";
+import { NotifierSetupContext } from "../../context/NotifierSetupContext";
+import { StationsContext } from "../../context/StationsContext";
 
 export default function ConfirmScreen() {
+  const { createNotifier } = useDb();
+  const { notifierSetup } = useContext(NotifierSetupContext);
+  const { stations } = useContext(StationsContext);
+
+  const onConfirm = () => {
+    const { stationId, threshold } = notifierSetup;
+    if (!stationId || !threshold) return;
+    createNotifier({ stationId, threshold });
+    router.push("/home");
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Confirm</Text>
+      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+      <Text style={styles.title}>Creating new Notifier</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
-      <Link href="/" asChild>
-        <Pressable>
-          <Text>Confirm!</Text>
+      {notifierSetup.stationId && (
+        <Pressable
+          onPress={() => router.push("/(createNotifier)/selectStation")}
+        >
+          <Text>
+            Station: {stations[notifierSetup.stationId].name.split(",")[0]}
+          </Text>
         </Pressable>
-      </Link>
+      )}
+      {notifierSetup.threshold && (
+        <Pressable
+          onPress={() => router.push("/(createNotifier)/selectThreshold")}
+        >
+          <Text>Threshold: {notifierSetup.threshold}</Text>
+        </Pressable>
+      )}
+      <Button style={{ marginTop: 50, padding: 10 }} onPress={onConfirm}>
+        <Text style={{ fontSize: 30 }}>Confirm</Text>
+      </Button>
     </View>
   );
 }

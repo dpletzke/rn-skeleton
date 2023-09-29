@@ -11,18 +11,13 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "index",
+  initialRouteName: "home",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  // const [loaded, error] = useFonts({
-  //   SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  //   ...FontAwesome.font,
-  // });
-
   const [loaded, error] = useFonts({
     Inter: require("../assets/fonts/Inter-VariableFont_slnt,wght.ttf"),
     ...FontAwesome.font,
@@ -46,7 +41,12 @@ export default function RootLayout() {
   return (
     <AppWrapper>
       <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="home"
+          options={{
+            headerShown: false,
+          }}
+        />
         <Stack.Screen name="notifier/[notifierId]" />
         <Stack.Screen
           name="(createNotifier)"
