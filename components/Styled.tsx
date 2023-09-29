@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 });
 
 export function StyledButton(props: StyledButtonProps) {
-  const { title, ...otherProps } = props;
+  const { title, style, ...otherProps } = props;
 
   return (
     <Button style={styles.button} {...otherProps}>
