@@ -9,6 +9,7 @@ import { AppProvider, UserProvider } from "@realm/react";
 import { RealmProvider } from "../schemas";
 import { appId, baseUrl } from "../atlasConfig.json";
 import { Login } from "./Login";
+import { StationsProvider } from "../context/StationsContext";
 
 const LoadingIndicator = () => {
   return (
@@ -43,7 +44,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
           <ThemeProvider
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
-            {children}
+            <StationsProvider>{children}</StationsProvider>
           </ThemeProvider>
         </RealmProvider>
       </UserProvider>
