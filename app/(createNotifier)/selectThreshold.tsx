@@ -1,12 +1,12 @@
+import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet, useColorScheme } from "react-native";
 import { useCallback, useContext, useMemo, useState } from "react";
+import { Platform, StyleSheet, useColorScheme } from "react-native";
 import { RulerPicker } from "react-native-ruler-picker";
 
 import { StyledButton, Text, View } from "../../components";
 import { NotifierSetupContext } from "../../context/NotifierSetupContext";
 import { getAqiInfo } from "../../utils";
-import { router } from "expo-router";
 
 export default function ThresholdScreen() {
   const { notifierSetup, setThreshold } = useContext(NotifierSetupContext);
@@ -42,7 +42,6 @@ export default function ThresholdScreen() {
 
   return (
     <View style={{ ...styles.container, backgroundColor: aqiInfo?.color }}>
-      <StatusBar style={Platform.OS === "ios" ? theme : "auto"} />
       <View
         style={{
           position: "fixed",

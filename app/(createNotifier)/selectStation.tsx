@@ -1,4 +1,7 @@
+import * as Location from "expo-location";
+import { Link, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useContext, useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Platform,
@@ -7,12 +10,9 @@ import {
 } from "react-native";
 
 import { Button, Text, View } from "../../components";
-import { Link, router } from "expo-router";
-import { useContext, useEffect, useState } from "react";
-import { StationsContext } from "../../context/StationsContext";
 import { NotifierSetupContext } from "../../context/NotifierSetupContext";
+import { StationsContext } from "../../context/StationsContext";
 import { StationRecord } from "../../types";
-import * as Location from "expo-location";
 import { requestStations } from "../../utils";
 
 export default function StationScreen() {
@@ -63,7 +63,6 @@ export default function StationScreen() {
   };
   return (
     <View style={styles.container}>
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
       {errorMsg && <Text> Error: {JSON.stringify(errorMsg, null, 2)}</Text>}
 
       {Object.values(stations).length <= 0 ? (

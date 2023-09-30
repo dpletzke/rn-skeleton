@@ -1,11 +1,11 @@
-import { StatusBar } from "expo-status-bar";
 import { Link } from "expo-router";
 import { useContext, useEffect } from "react";
 import { Alert, Platform, Pressable, StyleSheet } from "react-native";
 
 import { Text, View } from "../components";
-import { useDb } from "../hooks";
+import NotifierItem from "../components/NotifierItem";
 import { StationsContext } from "../context/StationsContext";
+import { useDb } from "../hooks";
 import { requestStation } from "../utils";
 
 export default function HomeScreen() {
@@ -33,7 +33,6 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
       <Text style={styles.title}>Home</Text>
       <View
         style={styles.separator}
@@ -45,14 +44,10 @@ export default function HomeScreen() {
       ) : (
         ownNotifiersResults.map((notifier, index) => {
           return (
-            <View key={`${index}` + notifier._id}>
-              <Text>
-                {stations[notifier.stationId]?.name} - {notifier.threshold}
-              </Text>
-              <Pressable onPress={() => deleteNotifier(notifier)}>
-                <Text>Delete</Text>
-              </Pressable>
-            </View>
+            <NotifierItem
+              key={`${notifier._id}-${index}`}
+              notifier={notifier}
+            />
           );
         })
       )}

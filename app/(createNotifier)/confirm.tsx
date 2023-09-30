@@ -1,12 +1,11 @@
-import { StatusBar } from "expo-status-bar";
-import { Platform, Pressable, StyleSheet } from "react-native";
-
-import { Button, StyledButton, Text, View } from "../../components";
-import { Link, router } from "expo-router";
-import { useDb } from "../../hooks";
+import { router } from "expo-router";
 import { useContext } from "react";
+import { Pressable, StyleSheet } from "react-native";
+
+import { Button, StatusBar, Text, View } from "../../components";
 import { NotifierSetupContext } from "../../context/NotifierSetupContext";
 import { StationsContext } from "../../context/StationsContext";
+import { useDb } from "../../hooks";
 
 export default function ConfirmScreen() {
   const { createNotifier } = useDb();
@@ -21,7 +20,6 @@ export default function ConfirmScreen() {
   };
   return (
     <View style={styles.container}>
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
       <Text style={styles.title}>Creating new Notifier</Text>
       <View
         style={styles.separator}

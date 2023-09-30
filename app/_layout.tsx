@@ -1,7 +1,9 @@
-import { useEffect } from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
+import { useEffect } from "react";
+
+import { StatusBar } from "../components";
 import { AppWrapper } from "../components/AppWrapper";
 
 export {
@@ -40,6 +42,7 @@ export default function RootLayout() {
 
   return (
     <AppWrapper>
+      <StatusBar />
       <Stack>
         <Stack.Screen
           name="home"
@@ -53,7 +56,6 @@ export default function RootLayout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
       </Stack>
     </AppWrapper>
   );
