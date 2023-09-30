@@ -1,6 +1,6 @@
 import Realm, { BSON } from "realm";
 
-export class Notifier extends Realm.Object<Notifier> {
+export class NotifierSchema extends Realm.Object<NotifierSchema> {
   _id!: Realm.BSON.ObjectId;
   owner_id!: string;
   stationId!: string;

@@ -1,15 +1,16 @@
-import { useCallback } from "react";
-import { useRealm, useQuery } from "../schemas";
-import { Notifier } from "../schemas/NotifierSchema";
 import { useUser } from "@realm/react";
+import { useCallback } from "react";
 import { BSON } from "realm";
+
+import { useQuery, useRealm } from "../schemas";
+import { NotifierSchema } from "../schemas/NotifierSchema";
 
 export const useDb = () => {
   const realm = useRealm();
   const user = useUser();
 
-  const ownNotifiersResults = useQuery<Notifier>(
-    "Notifier",
+  const ownNotifiersResults = useQuery<NotifierSchema>(
+    NotifierSchema,
     (collection) => collection.filtered("owner_id == $0", user.id),
     [user],
   );
