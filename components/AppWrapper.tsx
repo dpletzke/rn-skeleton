@@ -1,23 +1,16 @@
-import { ActivityIndicator, View, useColorScheme } from "react-native";
 import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
 } from "@react-navigation/native";
-import { useNotifications } from "../hooks";
 import { AppProvider, UserProvider } from "@realm/react";
-import { RealmProvider } from "../schemas";
-import { appId, baseUrl } from "../atlasConfig.json";
-import { Login } from "./Login";
-import { StationsProvider } from "../context/StationsContext";
+import { useColorScheme } from "react-native";
 
-const LoadingIndicator = () => {
-  return (
-    <View>
-      <ActivityIndicator size="large" />
-    </View>
-  );
-};
+import { appId, baseUrl } from "../atlasConfig.json";
+import { RealmSetupWrapper } from "../components/RealmSetupWrapper";
+import { StationsProvider } from "../context/StationsContext";
+import { useNotifications } from "../hooks";
+import { Login } from "./Login";
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
   const colorScheme = useColorScheme();
@@ -26,27 +19,13 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
   return (
     <AppProvider id={appId} baseUrl={baseUrl}>
       <UserProvider fallback={Login}>
-        <RealmProvider
-          fallback={LoadingIndicator}
-          sync={{
-            flexible: true,
-            onError: (session, error) => {
-              console.log(error);
-            },
-            initialSubscriptions: {
-              update: (subs, realm) => {
-                subs.add(realm.objects("Notifier"));
-              },
-              rerunOnOpen: true,
-            },
-          }}
-        >
+        <RealmSetupWrapper>
           <ThemeProvider
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
             <StationsProvider>{children}</StationsProvider>
           </ThemeProvider>
-        </RealmProvider>
+        </RealmSetupWrapper>
       </UserProvider>
     </AppProvider>
   );
