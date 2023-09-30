@@ -3,15 +3,18 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
+import { StatusBar as DefaultStatusBar } from "expo-status-bar";
 import {
   Text as DefaultText,
   View as DefaultView,
+  Platform,
   Pressable,
   PressableProps,
+  useColorScheme,
 } from "react-native";
 
-import { useThemeColor } from "../hooks/useThemeColor";
 import { ColorTiers } from "../constants/Colors";
+import { useThemeColor } from "../hooks/useThemeColor";
 
 type ThemeProps = {
   lightColor?: string;
@@ -42,6 +45,12 @@ export function View(props: ViewProps) {
   });
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+export function StatusBar() {
+  const theme = useColorScheme() === "dark" ? "light" : "dark";
+
+  return <DefaultStatusBar style={Platform.OS === "ios" ? theme : "auto"} />;
 }
 
 export function Button(props: ButtonProps) {
