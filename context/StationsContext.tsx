@@ -35,9 +35,9 @@ export const StationsProvider = ({
   };
 
   const setStationResponses = (reses: StationResponse[]) => {
-    const newReses = reses.reduce((acc, { data }) => {
-      const { idx, ...rest } = data;
-      acc[`${idx}`] = { stationId: `${idx}`, name: rest.city.name };
+    const newReses = reses.reduce((acc, res) => {
+      const { idx, city, ...rest } = res.data;
+      acc[`${idx}`] = { stationId: `${idx}`, name: city.name };
       return acc;
     }, {} as StationsType);
     setStations((prev) => mergeData(prev, newReses));
