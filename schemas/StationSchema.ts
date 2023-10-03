@@ -4,6 +4,7 @@ export class StationSchema extends Realm.Object<StationSchema> {
   _id!: Realm.BSON.ObjectId;
   stationId!: string;
   name!: string;
+  shortName!: string | null;
   aqi!: number | null;
   lastUpdated!: string;
 
@@ -14,6 +15,7 @@ export class StationSchema extends Realm.Object<StationSchema> {
       _id: { type: "objectId", default: () => new BSON.ObjectId() },
       stationId: "string",
       name: "string",
+      shortName: "string",
       aqi: "int",
       lastUpdated: "string",
     },

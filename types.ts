@@ -90,8 +90,8 @@ export type StationResponse = {
     city: StationCity;
     dominentpol: string;
     iaqi: QualityType;
+    time: StationTime;
   };
-  time: StationTime;
 };
 
 export type StationRecord = {
