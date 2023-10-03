@@ -5,10 +5,9 @@ import { BSON } from "realm";
 import { useQuery, useRealm } from "../schemas";
 import { NotifierSchema } from "../schemas/NotifierSchema";
 
-export const useDb = () => {
+export const useNotifiers = () => {
   const realm = useRealm();
   const user = useUser();
-
   const ownNotifiersResults = useQuery<NotifierSchema>(
     NotifierSchema,
     (collection) => collection.filtered("owner_id == $0", user.id),
@@ -16,11 +15,10 @@ export const useDb = () => {
   );
 
   const createNotifier = useCallback(
-    ({ stationId, threshold }: { stationId: string; threshold: number }) => {
+    (newNotifier: { stationId: string; threshold: number }) => {
       realm.write(() => {
-        return new Notifier(realm, {
-          threshold,
-          stationId,
+        return new NotifierSchema(realm, {
+          ...newNotifier,
           owner_id: user?.id,
         });
       });
@@ -36,10 +34,7 @@ export const useDb = () => {
   );
 
   const editNotifier = useCallback(
-    (
-      notifier: Notifier,
-      edits: Partial<Omit<Notifier, "_id" | "owner_id">>,
-    ) => {
+    (notifier: NotifierSchema, edits: { threshold?: number }) => {
       realm.write(() => {
         if (notifier.owner_id !== user?.id) {
           throw new Error("Cannot edit notifiers owned by other users");
@@ -51,7 +46,7 @@ export const useDb = () => {
   );
 
   const deleteNotifier = useCallback(
-    (notifier: Notifier) => {
+    (notifier: NotifierSchema) => {
       realm.write(() => {
         realm.delete(notifier);
       });
@@ -60,8 +55,6 @@ export const useDb = () => {
   );
 
   return {
-    realm,
-    user,
     ownNotifiersResults,
     getNotifierById,
     createNotifier,
