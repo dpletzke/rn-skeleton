@@ -5,10 +5,10 @@ import { Pressable, StyleSheet } from "react-native";
 import { Button, StatusBar, Text, View } from "../../components";
 import { NotifierSetupContext } from "../../context/NotifierSetupContext";
 import { StationsContext } from "../../context/StationsContext";
-import { useDb } from "../../hooks";
+import { useNotifiers } from "../../hooks";
 
 export default function ConfirmScreen() {
-  const { createNotifier } = useDb();
+  const { createNotifier } = useNotifiers();
   const { notifierSetup } = useContext(NotifierSetupContext);
   const { stations } = useContext(StationsContext);
 
@@ -16,7 +16,8 @@ export default function ConfirmScreen() {
     const { stationId, threshold } = notifierSetup;
     if (!stationId || !threshold) return;
     createNotifier({ stationId, threshold });
-    router.push("/home");
+
+    router.push("/");
   };
   return (
     <View style={styles.container}>

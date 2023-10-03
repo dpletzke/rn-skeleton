@@ -4,7 +4,7 @@ import { Pressable, StyleSheet } from "react-native";
 
 import Colors from "../constants/Colors";
 import { StationsContext } from "../context/StationsContext";
-import { useDb, useThemeColor } from "../hooks";
+import { useNotifiers, useStations, useThemeColor } from "../hooks";
 import { NotifierSchema } from "../schemas/NotifierSchema";
 import { Text, View } from "./Themed";
 
@@ -27,19 +27,19 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {
-  notifier: NotifierSchema;
-};
-
 const shortenName = (name: string) => {
   const splitName = name.split(",");
   return `${splitName[0]} ${splitName[splitName.length - 1]}`;
 };
 
-export default function NotifierItem(props: Props) {
-  const { notifier } = props;
-  const { stations } = useContext(StationsContext);
-  const { deleteNotifier } = useDb();
+export default function NotifierItem({
+  notifier,
+}: {
+  notifier: NotifierSchema;
+}) {
+  // const { stations } = useContext(StationsContext);
+  const { deleteNotifier } = useNotifiers();
+  const { stations } = useStations();
 
   const dangerColor = useThemeColor("danger");
 
@@ -47,7 +47,8 @@ export default function NotifierItem(props: Props) {
     <View style={styles.container}>
       <View style={styles.notifier}>
         <Text style={{ fontFamily: "Inter" }}>
-          {stations[notifier.stationId]?.name}
+          {stations.find((s) => s.stationId === notifier.stationId)
+            ?.shortName || ""}
         </Text>
       </View>
       <Pressable onPress={() => deleteNotifier(notifier)}>

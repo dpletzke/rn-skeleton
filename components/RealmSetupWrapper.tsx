@@ -35,8 +35,8 @@ export function RealmSetupWrapper({ children }: { children: React.ReactNode }) {
               usersOwnNotifiers.map((n) => n.stationId),
             );
             try {
-              subs.add(usersOwnNotifiers);
-              subs.add(relevantStations);
+              subs.add(usersOwnNotifiers, { name: "usersOwnNotifiers" });
+              subs.add(relevantStations, { name: "relevantStations" });
             } catch (error) {
               console.log("Realm add subscription error: ", error);
             }
