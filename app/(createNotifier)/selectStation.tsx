@@ -1,6 +1,5 @@
 import * as Location from "expo-location";
 import { Link, router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import { useContext, useEffect, useState } from "react";
 import {
   ActivityIndicator,

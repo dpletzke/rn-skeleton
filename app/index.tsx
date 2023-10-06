@@ -1,24 +1,20 @@
-import { Link } from "expo-router";
-import { useContext, useEffect } from "react";
+import { useUser } from "@realm/react";
+import { router } from "expo-router";
+import { useEffect } from "react";
 import { Alert, Pressable, StyleSheet } from "react-native";
 
-import { Text, View } from "../components";
+import { StyledButton, Text, View } from "../components";
 import NotifierItem from "../components/NotifierItem";
-import { StationsContext } from "../context/StationsContext";
-import { useNotifiers, useStations } from "../hooks";
+import { useNotifications, useNotifiers, useStations } from "../hooks";
 import { requestStation } from "../utils";
 
 export default function HomeScreen() {
-  // const { stations, setStationLookups, setStationResponses } =
-  //   useContext(StationsContext);
-
-  const {
-    stations,
-    createStation,
-    deleteStation,
-    upsertStationsFromResponses,
-  } = useStations();
-  const { ownNotifiersResults, deleteNotifier } = useNotifiers();
+  const { upsertStationsFromResponses } = useStations();
+  const { ownNotifiersResults } = useNotifiers();
+  const [expoPushToken] = useNotifications();
+  useEffect(() => {
+    console.log("expoPushToken", expoPushToken);
+  });
 
   useEffect(() => {
     const notifiersForStationsWithoutData = ownNotifiersResults.filtered(
@@ -49,7 +45,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Stations</Text>
+      <Text style={styles.title}>Your Stations</Text>
       <View
         style={styles.separator}
         lightColor="#eee"
@@ -72,11 +68,12 @@ export default function HomeScreen() {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <Link href="/(createNotifier)/selectStation" asChild>
-        <Pressable>
-          <Text>Create Notifier</Text>
-        </Pressable>
-      </Link>
+      <StyledButton
+        title="Create New Alert"
+        onPress={() => {
+          router.push("/(createNotifier)/selectStation");
+        }}
+      />
     </View>
   );
 }
