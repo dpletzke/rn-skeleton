@@ -1,7 +1,9 @@
-import { useState, useEffect, useRef } from "react";
 import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
+import { useEffect, useRef, useState } from "react";
+
 import { registerForPushNotificationsAsync } from "../utils/notificationUtils";
+import { useCustomUserData } from "./useCustomUserData";
 
 export const useNotifications = () => {
   const [expoPushToken, setExpoPushToken] = useState<
@@ -12,11 +14,21 @@ export const useNotifications = () => {
   >(false);
   const notificationListener = useRef<Notifications.Subscription | undefined>();
   const responseListener = useRef<Notifications.Subscription | undefined>();
+  const { writeCustomUserData } = useCustomUserData();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
-      setExpoPushToken(token)
-    );
+    registerForPushNotificationsAsync().then((token) => {
+      setExpoPushToken(token);
+      if (token) {
+        writeCustomUserData(token)
+          .then(() => {
+            console.log("wrote token to user data");
+          })
+          .catch((err) => {
+            console.log("error writing token to user data", err);
+          });
+      }
+    });
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
@@ -29,13 +41,13 @@ export const useNotifications = () => {
 
     return () => {
       Notifications.removeNotificationSubscription(
-        notificationListener.current!
+        notificationListener.current!,
       );
       Notifications.removeNotificationSubscription(responseListener.current!);
     };
   }, []);
 
-  return [expoPushToken];
+  return [expoPushToken, notification];
 };
 
 export function useNotificationObserver() {
@@ -59,7 +71,7 @@ export function useNotificationObserver() {
     const subscription = Notifications.addNotificationResponseReceivedListener(
       (response) => {
         redirect(response.notification);
-      }
+      },
     );
 
     return () => {

@@ -16,6 +16,7 @@ export const useNotifiers = () => {
 
   const createNotifier = useCallback(
     (newNotifier: { stationId: string; threshold: number }) => {
+      console.log("createNotifier", newNotifier);
       realm.write(() => {
         return new NotifierSchema(realm, {
           ...newNotifier,
@@ -35,6 +36,7 @@ export const useNotifiers = () => {
 
   const editNotifier = useCallback(
     (notifier: NotifierSchema, edits: { threshold?: number }) => {
+      console.log("editNotifier", notifier, edits);
       realm.write(() => {
         if (notifier.owner_id !== user?.id) {
           throw new Error("Cannot edit notifiers owned by other users");
