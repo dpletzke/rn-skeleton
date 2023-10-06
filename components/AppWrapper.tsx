@@ -8,13 +8,11 @@ import { useColorScheme } from "react-native";
 
 import { appId, baseUrl } from "../atlasConfig.json";
 import { RealmSetupWrapper } from "../components/RealmSetupWrapper";
-import { StationsProvider } from "../context/StationsContext";
 import { useNotifications } from "../hooks";
 import { Login } from "./Login";
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
   const colorScheme = useColorScheme();
-  const [expoPushToken] = useNotifications();
 
   return (
     <AppProvider id={appId} baseUrl={baseUrl}>
@@ -23,7 +21,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
           <ThemeProvider
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >
-            <StationsProvider>{children}</StationsProvider>
+            {children}
           </ThemeProvider>
         </RealmSetupWrapper>
       </UserProvider>

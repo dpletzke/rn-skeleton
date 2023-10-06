@@ -30,13 +30,15 @@ export function RealmSetupWrapper({ children }: { children: React.ReactNode }) {
             const usersOwnNotifiers = realm
               .objects(NotifierSchema)
               .filtered("owner_id = $0", user.id);
-            const relevantStations = realm.objects(StationSchema).filtered(
-              "stationId IN $0",
-              usersOwnNotifiers.map((n) => n.stationId),
-            );
+            // const relevantStations = realm.objects(StationSchema).filtered(
+            //   "stationId IN $0",
+            //   usersOwnNotifiers.map((n) => n.stationId),
+            // );
+            const allStations = realm.objects(StationSchema);
             try {
               subs.add(usersOwnNotifiers, { name: "usersOwnNotifiers" });
-              subs.add(relevantStations, { name: "relevantStations" });
+              subs.add(allStations, { name: "allStations" });
+              // subs.add(relevantStations, { name: "relevantStations" });
             } catch (error) {
               console.log("Realm add subscription error: ", error);
             }

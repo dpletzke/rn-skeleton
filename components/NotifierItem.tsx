@@ -1,11 +1,12 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { useContext, useEffect } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { useContext, useEffect, useState } from "react";
+import { Dimensions, Pressable, StyleSheet } from "react-native";
 
 import Colors from "../constants/Colors";
 import { StationsContext } from "../context/StationsContext";
 import { useNotifiers, useStations, useThemeColor } from "../hooks";
 import { NotifierSchema } from "../schemas/NotifierSchema";
+import { getAqiInfo } from "../utils";
 import { Text, View } from "./Themed";
 
 const styles = StyleSheet.create({
@@ -19,43 +20,85 @@ const styles = StyleSheet.create({
   notifier: {
     display: "flex",
     flexDirection: "row",
+    flex: 1,
     justifyContent: "space-between",
-    padding: 20,
+    alignItems: "center",
+    paddingLeft: 20,
+    height: 70,
+  },
+  notifierText: {
+    fontFamily: "Inter_900Black",
+    fontSize: 15,
+    maxWidth: Dimensions.get("window").width * 0.5,
   },
   deleteButton: {
-    padding: 20,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 70,
+    height: 70,
   },
 });
-
-const shortenName = (name: string) => {
-  const splitName = name.split(",");
-  return `${splitName[0]} ${splitName[splitName.length - 1]}`;
-};
 
 export default function NotifierItem({
   notifier,
 }: {
   notifier: NotifierSchema;
 }) {
-  // const { stations } = useContext(StationsContext);
   const { deleteNotifier } = useNotifiers();
   const { stations } = useStations();
-
   const dangerColor = useThemeColor("danger");
+  const thisStation = stations.find((s) => s.stationId === notifier.stationId);
+  const [open, setOpen] = useState(false);
+
+  if (!thisStation) return <></>;
+
+  const thisAqiInfo = thisStation.aqi ? getAqiInfo(thisStation.aqi) : undefined;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.notifier}>
-        <Text style={{ fontFamily: "Inter" }}>
-          {stations.find((s) => s.stationId === notifier.stationId)
-            ?.shortName || ""}
-        </Text>
-      </View>
-      <Pressable onPress={() => deleteNotifier(notifier)}>
-        <View style={styles.deleteButton}>
-          <FontAwesome size={30} name="close" color={dangerColor} />
+    <View style={{ borderWidth: 1, marginBottom: 10 }}>
+      <View style={styles.container}>
+        <View
+          style={{ ...styles.notifier, backgroundColor: thisAqiInfo?.color }}
+        >
+          <View
+            style={{
+              padding: 10,
+              borderRadius: 20,
+              borderWidth: 1,
+              borderColor: "black",
+            }}
+          >
+            <Text style={{ ...styles.notifierText }}>
+              {thisStation?.shortName || thisStation.name}
+            </Text>
+          </View>
+          {/* <Text style={{ paddingRight: 10 }}>
+          {`${thisStation.aqi} aqi` || "Station Offline"}
+        </Text> */}
+          <Pressable onPress={() => setOpen(!open)}>
+            <FontAwesome
+              size={30}
+              name={open ? "angle-up" : "angle-down"}
+              color={"black"}
+              style={{ paddingRight: 20 }}
+            />
+          </Pressable>
         </View>
-      </Pressable>
+        <Pressable onPress={() => deleteNotifier(notifier)}>
+          <View
+            style={{ ...styles.deleteButton, backgroundColor: dangerColor }}
+          >
+            <FontAwesome size={30} name="close" color={"white"} />
+          </View>
+        </Pressable>
+      </View>
+      {open && (
+        <View style={{ paddingLeft: 20 }}>
+          <Text>{thisAqiInfo?.label}</Text>
+          <Text>{`${thisStation.aqi} aqi` || "Station Offline"}</Text>
+        </View>
+      )}
     </View>
   );
 }

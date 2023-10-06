@@ -1,7 +1,14 @@
-import { PressableProps, StyleProp, StyleSheet, ViewStyle } from "react-native";
-import { Button, Text } from "./Themed";
-import { ColorTiers } from "../constants/Colors";
 import { Link, LinkProps } from "expo-router";
+import {
+  Pressable,
+  PressableProps,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
+
+import { ColorTiers } from "../constants/Colors";
+import { Button, Text, View } from "./Themed";
 
 type StyledButtonProps = PressableProps & {
   title: string;
@@ -27,22 +34,5 @@ export function StyledButton(props: StyledButtonProps) {
     <Button style={styles.button} {...otherProps}>
       <Text style={styles.text}>{title}</Text>
     </Button>
-  );
-}
-
-type StyledLinkProps = PressableProps & {
-  title: string;
-  variant?: "contained" | "outlined" | "text";
-  tier?: ColorTiers;
-};
-
-export function StyledLinkButton(props: {
-  linkProps: LinkProps<{}>;
-  buttonProps: StyledButtonProps;
-}) {
-  return (
-    <Link asChild {...props.linkProps}>
-      <StyledButton {...props.buttonProps} />
-    </Link>
   );
 }
