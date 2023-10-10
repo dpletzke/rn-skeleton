@@ -1,8 +1,7 @@
-import { Platform } from "react-native";
-
+import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import Constants from "expo-constants";
+import { Platform } from "react-native";
 
 export async function registerForPushNotificationsAsync() {
   if (!Device.isDevice)
@@ -32,7 +31,6 @@ export async function registerForPushNotificationsAsync() {
   token = await Notifications.getExpoPushTokenAsync({
     projectId: Constants.expoConfig!.extra!.eas.projectId as string,
   });
-  console.log(token);
 
   if (Platform.OS === "android") {
     Notifications.setNotificationChannelAsync("default", {

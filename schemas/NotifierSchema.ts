@@ -5,6 +5,7 @@ export class NotifierSchema extends Realm.Object<NotifierSchema> {
   owner_id!: string;
   stationId!: string;
   threshold!: number;
+  isNotified!: boolean;
 
   static schema: Realm.ObjectSchema = {
     name: "Notifier",
@@ -14,6 +15,7 @@ export class NotifierSchema extends Realm.Object<NotifierSchema> {
       owner_id: "string",
       stationId: "string",
       threshold: "int",
+      isNotified: { type: "bool", default: false },
     },
   };
 }

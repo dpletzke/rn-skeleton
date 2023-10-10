@@ -9,39 +9,34 @@ import { useNotifications, useNotifiers, useStations } from "../hooks";
 import { requestStation } from "../utils";
 
 export default function HomeScreen() {
-  const { upsertStationsFromResponses } = useStations();
-  const { ownNotifiersResults } = useNotifiers();
+  const { upsertStationsFromResponses, stations } = useStations();
+  const { notifiers } = useNotifiers();
   const [expoPushToken] = useNotifications();
-  useEffect(() => {
-    console.log("expoPushToken", expoPushToken);
-  });
 
   useEffect(() => {
-    const notifiersForStationsWithoutData = ownNotifiersResults.filtered(
-      "stationId IN $0",
-      ownNotifiersResults.map((n) => n.stationId),
-    );
-    console.log(
-      "notifiersForStationsWithoutData",
-      notifiersForStationsWithoutData.map((n) => n.stationId),
-    );
+    const missingStations = notifiers
+      .map((n) => n.stationId)
+      .filter((stationId) => {
+        return !stations.find((s) => s.stationId === stationId);
+      });
 
-    Promise.all(
-      notifiersForStationsWithoutData.map((notifier) => {
-        return requestStation(notifier.stationId);
-      }),
-    )
+    if (missingStations.length <= 0) {
+      return;
+    }
+    console.log("requesting missing data", missingStations);
+
+    const missingStationRequests = missingStations.map((stationId) => {
+      return requestStation(stationId);
+    });
+
+    Promise.all(missingStationRequests)
       .then((res) => {
-        console.log(
-          "res",
-          res.map((r) => r.data.city.name),
-        );
         upsertStationsFromResponses(res);
       })
       .catch((error) => {
         Alert.alert("Error", error.message);
       });
-  }, [ownNotifiersResults]);
+  }, [notifiers, stations, upsertStationsFromResponses]);
 
   return (
     <View style={styles.container}>
@@ -51,10 +46,10 @@ export default function HomeScreen() {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      {ownNotifiersResults.length <= 0 ? (
+      {notifiers.length <= 0 ? (
         <Text>No Notifiers</Text>
       ) : (
-        ownNotifiersResults.map((notifier, index) => {
+        notifiers.map((notifier, index) => {
           return (
             <NotifierItem
               key={`${notifier._id}-${index}`}
