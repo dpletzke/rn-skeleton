@@ -57,7 +57,7 @@ export const useNotifiers = () => {
   );
 
   return {
-    ownNotifiersResults,
+    notifiers: ownNotifiersResults,
     getNotifierById,
     createNotifier,
     editNotifier,

@@ -19,9 +19,6 @@ export const useStations = () => {
   const user = useUser();
   const stations = useQuery<StationSchema>(StationSchema);
 
-  //temporary,
-  //TODO have server query the external api and make the stations which are then read by the app
-  // we only subscribe to stations that are
   const createStation = useCallback(
     (newStation: StationType) => {
       realm.write(() => {
