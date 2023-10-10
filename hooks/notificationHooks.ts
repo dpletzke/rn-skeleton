@@ -3,32 +3,33 @@ import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 
 import { registerForPushNotificationsAsync } from "../utils/notificationUtils";
-import { useCustomUserData } from "./useCustomUserData";
+import { useUserData } from "./useUserData";
 
 export const useNotifications = () => {
-  const [expoPushToken, setExpoPushToken] = useState<
-    Notifications.ExpoPushToken | undefined
-  >(undefined);
+  const { readUserData, editUserData } = useUserData();
   const [notification, setNotification] = useState<
     Notifications.Notification | boolean
   >(false);
   const notificationListener = useRef<Notifications.Subscription | undefined>();
   const responseListener = useRef<Notifications.Subscription | undefined>();
-  const { writeCustomUserData } = useCustomUserData();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) => {
-      setExpoPushToken(token);
-      if (token) {
-        writeCustomUserData(token)
-          .then(() => {
-            console.log("wrote token to user data");
-          })
-          .catch((err) => {
-            console.log("error writing token to user data", err);
-          });
-      }
-    });
+    readUserData()
+      .then(({ expoPushToken }) => {
+        if (expoPushToken) {
+          return;
+        }
+        return registerForPushNotificationsAsync();
+      })
+      .then((token) => {
+        if (!token) {
+          return;
+        }
+        return editUserData({ expoPushToken: token.data });
+      })
+      .catch((err) => {
+        console.log("error writing token to user data", err);
+      });
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         setNotification(notification);
@@ -45,9 +46,9 @@ export const useNotifications = () => {
       );
       Notifications.removeNotificationSubscription(responseListener.current!);
     };
-  }, []);
+  }, [readUserData, editUserData]);
 
-  return [expoPushToken, notification];
+  return [notification];
 };
 
 export function useNotificationObserver() {
