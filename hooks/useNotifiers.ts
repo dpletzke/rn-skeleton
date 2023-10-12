@@ -16,7 +16,6 @@ export const useNotifiers = () => {
 
   const createNotifier = useCallback(
     (newNotifier: { stationId: string; threshold: number }) => {
-      console.log("createNotifier", newNotifier);
       realm.write(() => {
         return new NotifierSchema(realm, {
           ...newNotifier,

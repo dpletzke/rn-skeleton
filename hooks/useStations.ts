@@ -80,7 +80,7 @@ export const useStations = () => {
           stationId: `${uid}`,
           name: station.name,
           shortName: station.name.split(",")[0],
-          aqi,
+          aqi: aqi === "-" ? null : parseInt(aqi),
           lastUpdated: station.time,
         });
       });
@@ -95,7 +95,7 @@ export const useStations = () => {
           stationId: `${idx}`,
           name: city.name,
           shortName: city.name.split(",")[0],
-          aqi: aqi === "-" ? null : aqi,
+          aqi: aqi === "-" ? null : parseInt(aqi),
           lastUpdated: time.iso,
         });
       });
@@ -117,6 +117,7 @@ export const useStations = () => {
     getStationById,
     getStationByStationId,
     editStation,
+    prepareUpsertStation,
     upsertStationsFromLookups,
     upsertStationsFromResponses,
     deleteStation,
