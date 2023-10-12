@@ -5,19 +5,39 @@ import { Pressable, StyleSheet } from "react-native";
 import { Button, StatusBar, Text, View } from "../../components";
 import { NotifierSetupContext } from "../../context/NotifierSetupContext";
 import { StationsContext } from "../../context/StationsContext";
-import { useNotifiers } from "../../hooks";
+import { useNotifiers, useStations } from "../../hooks";
+import { useRealm } from "../../schemas";
 
 export default function ConfirmScreen() {
   const { createNotifier } = useNotifiers();
+  const { prepareUpsertStation } = useStations();
   const { notifierSetup } = useContext(NotifierSetupContext);
   const { stations } = useContext(StationsContext);
-
+  const realm = useRealm();
   const onConfirm = () => {
     const { stationId, threshold } = notifierSetup;
     if (!stationId || !threshold) return;
     createNotifier({ stationId, threshold });
-
-    router.push("/");
+    realm.subscriptions
+      .waitForSynchronization()
+      .then(() => {
+        const { name, aqi, lastUpdated } = stations[stationId];
+        return realm.write(() =>
+          prepareUpsertStation({
+            stationId,
+            aqi,
+            lastUpdated,
+            name,
+            shortName: name.split(",")[0],
+          }),
+        );
+      })
+      .then(() => {
+        router.push("/");
+      })
+      .catch((error) => {
+        console.log("Realm subscription error: ", error);
+      });
   };
   return (
     <View style={styles.container}>
