@@ -35,6 +35,8 @@ export function RealmSetupWrapper({ children }: { children: React.ReactNode }) {
               usersOwnNotifiers.map((n) => n.stationId),
             );
 
+            const stations = realm.objects(StationSchema);
+
             try {
               subs.add(usersOwnNotifiers, {
                 name: "usersOwnNotifiers",
@@ -44,6 +46,10 @@ export function RealmSetupWrapper({ children }: { children: React.ReactNode }) {
                 name: "relevantStations",
                 behavior: WaitForSync.FirstTime,
               });
+              // subs.add(stations, {
+              //   name: "stations",
+              //   behavior: WaitForSync.FirstTime,
+              // });
             } catch (error) {
               console.log("Realm add subscription error: ", error);
             }

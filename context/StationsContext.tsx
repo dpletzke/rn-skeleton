@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
-import { StationLookup, StationResponse, StationRecord } from "../types";
+
+import { StationLookup, StationRecord, StationResponse } from "../types";
 import { mergeData } from "../utils";
 
 type StationsType = { [key: string]: StationRecord };
@@ -27,8 +28,13 @@ export const StationsProvider = ({
   const [stations, setStations] = useState<StationsType>({});
 
   const setStationLookups = (lookups: StationLookup[]) => {
-    const newLookups = lookups.reduce((acc, { uid, station }) => {
-      acc[`${uid}`] = { stationId: `${uid}`, name: station.name };
+    const newLookups = lookups.reduce((acc, { uid, station, aqi }) => {
+      acc[`${uid}`] = {
+        stationId: `${uid}`,
+        name: station.name,
+        aqi: aqi === "-" ? null : parseInt(aqi),
+        lastUpdated: station.time,
+      };
       return acc;
     }, {} as StationsType);
     setStations((prev) => mergeData(prev, newLookups));
@@ -36,8 +42,13 @@ export const StationsProvider = ({
 
   const setStationResponses = (reses: StationResponse[]) => {
     const newReses = reses.reduce((acc, res) => {
-      const { idx, city, ...rest } = res.data;
-      acc[`${idx}`] = { stationId: `${idx}`, name: city.name };
+      const { idx, city, aqi, time } = res.data;
+      acc[`${idx}`] = {
+        stationId: `${idx}`,
+        name: city.name,
+        aqi: aqi === "-" ? null : parseInt(aqi),
+        lastUpdated: time.iso,
+      };
       return acc;
     }, {} as StationsType);
     setStations((prev) => mergeData(prev, newReses));

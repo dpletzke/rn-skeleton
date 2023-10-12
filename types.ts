@@ -13,7 +13,7 @@ export type Error2Response = {
 
 export type StationLookup = {
   uid: number;
-  aqi: number;
+  aqi: "-" | string;
   lat: number;
   lon: number;
   station: {
@@ -84,7 +84,7 @@ export type QualityType = {
 export type StationResponse = {
   status: "ok";
   data: {
-    aqi: "-" | number;
+    aqi: "-" | string;
     idx: number;
     attributions: StationAttribution[] | [];
     city: StationCity;
@@ -97,4 +97,6 @@ export type StationResponse = {
 export type StationRecord = {
   stationId: string;
   name: string;
+  aqi: number | null;
+  lastUpdated: string;
 };
