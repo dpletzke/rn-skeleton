@@ -35,4 +35,4 @@ export const aqiLevels = [
     description:
       "Health warning of emergency conditions: everyone is more likely to be affected.",
   },
-];
+] as const;

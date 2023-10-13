@@ -46,3 +46,52 @@ export const newShade = (hexColor: string, magnitude: number) => {
     return hexColor;
   }
 };
+
+function hexToRgb(hex: string) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+}
+
+function isLight(color: string) {
+  // Variables for red, green, blue values
+  let r, g, b, hsp;
+
+  // Check the format of the color, HEX or RGB?
+  if (color.match(/^rgb/)) {
+    // If RGB --> store the red, green, blue values in separate variables
+    const rgb = color.match(
+      /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)$/,
+    );
+    if (!rgb) {
+      return "light";
+    }
+
+    r = parseInt(rgb[1]);
+    g = parseInt(rgb[2]);
+    b = parseInt(rgb[3]);
+  } else {
+    // If hex --> Convert it to RGB: http://gist.github.com/983661
+    const hexColor = hexToRgb(color);
+    if (!hexColor) {
+      return "light";
+    }
+    r = hexColor.r;
+    g = hexColor.g;
+    b = hexColor.b;
+  }
+
+  hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
+
+  // Using the HSP value, determine whether the color is light or dark
+  return hsp > 127.5;
+}
+
+export function getTextColor(color: string) {
+  return isLight(color) ? newShade(color, -150) : newShade(color, 150);
+}

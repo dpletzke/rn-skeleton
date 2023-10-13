@@ -10,3 +10,5 @@ const realmConfig: Realm.Configuration = {
 
 export const { RealmProvider, useRealm, useObject, useQuery } =
   createRealmContext(realmConfig);
+
+export { NotifierSchema, StationSchema };
