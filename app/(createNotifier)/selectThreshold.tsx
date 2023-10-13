@@ -41,7 +41,7 @@ export default function ThresholdScreen() {
   }, [notifierSetup.threshold]);
 
   return (
-    <View style={{ ...styles.container, backgroundColor: aqiInfo?.color }}>
+    <View style={{ ...styles.container }}>
       <View
         style={{
           position: "fixed",
@@ -56,7 +56,7 @@ export default function ThresholdScreen() {
       </View>
 
       <RulerPicker
-        min={51}
+        min={10}
         max={301}
         step={1}
         fractionDigits={0}

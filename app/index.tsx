@@ -3,8 +3,13 @@ import { router } from "expo-router";
 import { useEffect } from "react";
 import { Alert, Pressable, StyleSheet } from "react-native";
 
-import { StyledButton, Text, View } from "../components";
-import NotifierItem from "../components/NotifierItem";
+import {
+  NotifierItem,
+  StyledButton,
+  Text,
+  ThemedCard,
+  View,
+} from "../components";
 import { useNotifications, useNotifiers, useStations } from "../hooks";
 import { requestStation } from "../utils";
 
