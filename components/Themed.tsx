@@ -3,13 +3,17 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
+import { Card, CardProps } from "@rneui/base";
 import { StatusBar as DefaultStatusBar } from "expo-status-bar";
+import React, { Children } from "react";
 import {
   Text as DefaultText,
   View as DefaultView,
   Platform,
   Pressable,
   PressableProps,
+  StyleProp,
+  ViewStyle,
   useColorScheme,
 } from "react-native";
 
@@ -77,4 +81,32 @@ export function Button(props: ButtonProps) {
       {children}
     </Pressable>
   );
+}
+
+export function ThemedCard(
+  props: {
+    containerStyle?: StyleProp<ViewStyle>;
+    wrapperStyle?: StyleProp<ViewStyle>;
+  } & ThemeProps & {
+      children: React.ReactNode;
+    },
+) {
+  const { containerStyle, wrapperStyle, darkColor, lightColor, children } =
+    props;
+  const backgroundColor = useThemeColor("background", {
+    light: lightColor,
+    dark: darkColor,
+  });
+
+  const cardProps = {
+    containerStyle: [
+      {
+        backgroundColor,
+      },
+      containerStyle,
+    ],
+    wrapperStyle,
+    backgroundColor,
+  };
+  return <Card {...cardProps}>{children}</Card>;
 }
