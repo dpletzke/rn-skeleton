@@ -1,5 +1,11 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Pressable, StyleProp, View, ViewStyle } from "react-native";
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from "react-native";
 
 import { useThemeColor } from "../../hooks";
 
@@ -55,7 +61,7 @@ export function DrawerButton({ direction, onPress, style }: DrawerButtonProps) {
           justifyContent: "center",
           alignItems: "center",
           backgroundColor: infoColor,
-          height: 100,
+          height: 150,
           padding: 10,
           ...styles,
         }}

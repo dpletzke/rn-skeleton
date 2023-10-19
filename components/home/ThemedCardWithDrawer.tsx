@@ -62,30 +62,30 @@ export function ThemedCardWithDrawer(props: {
 
   const isColumn = ["top", "bottom"].includes(drawerClosedLocation);
 
-  const buttonBefore = (
-    <View
-      style={{
-        display: "flex",
-        flexDirection: isColumn ? "column" : "row",
-      }}
-    >
-      <DrawerButton onPress={() => changeState()} direction={currentLocation} />
-      {isOpen ? openChildren : closedChildren}
-    </View>
-  );
-
-  const buttonAfter = (
-    <View
-      style={{ display: "flex", flexDirection: isColumn ? "column" : "row" }}
-    >
-      {isOpen ? openChildren : closedChildren}
-      <DrawerButton onPress={() => changeState()} direction={currentLocation} />
-    </View>
-  );
-
   return (
     <ThemedCard {...cardProps}>
-      {isButtonBeforeContent ? buttonBefore : buttonAfter}
+      <View
+        style={{
+          display: "flex",
+          flexDirection: isColumn ? "column" : "row",
+          backgroundColor: "lightgreen",
+          height: "100%",
+        }}
+      >
+        {isButtonBeforeContent && (
+          <DrawerButton
+            onPress={() => changeState()}
+            direction={currentLocation}
+          />
+        )}
+        {isOpen ? openChildren : closedChildren}
+        {!isButtonBeforeContent && (
+          <DrawerButton
+            onPress={() => changeState()}
+            direction={currentLocation}
+          />
+        )}
+      </View>
     </ThemedCard>
   );
 }

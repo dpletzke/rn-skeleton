@@ -12,14 +12,9 @@ import NotifierTextContent from "./NotifierTextContent";
 type Props = {
   notifier: NotifierSchema;
   thisStation: StationSchema;
-  changeOpenState: () => void;
 };
 
-export default function ClosedNotifierItem({
-  thisStation,
-  notifier,
-  changeOpenState,
-}: Props) {
+export default function ClosedNotifierItem({ thisStation, notifier }: Props) {
   const thisAqiInfo = thisStation.aqi ? getAqiInfo(thisStation.aqi) : undefined;
   const tierBackground = thisAqiInfo
     ? Colors.tiers[thisAqiInfo?.label]
