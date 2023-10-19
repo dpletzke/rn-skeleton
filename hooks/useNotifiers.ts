@@ -34,7 +34,10 @@ export const useNotifiers = () => {
   );
 
   const editNotifier = useCallback(
-    (notifier: NotifierSchema, edits: { threshold?: number }) => {
+    (
+      notifier: NotifierSchema,
+      edits: { threshold?: number; notifsAreOn?: boolean },
+    ) => {
       console.log("editNotifier", notifier, edits);
       realm.write(() => {
         if (notifier.owner_id !== user?.id) {

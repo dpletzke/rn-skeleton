@@ -106,7 +106,6 @@ export function ThemedCard(
       containerStyle,
     ],
     wrapperStyle,
-    backgroundColor,
   };
   return <Card {...cardProps}>{children}</Card>;
 }

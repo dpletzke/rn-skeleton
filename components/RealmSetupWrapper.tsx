@@ -40,11 +40,11 @@ export function RealmSetupWrapper({ children }: { children: React.ReactNode }) {
             try {
               subs.add(usersOwnNotifiers, {
                 name: "usersOwnNotifiers",
-                behavior: WaitForSync.FirstTime,
+                behavior: WaitForSync.Always,
               });
               subs.add(relevantStations, {
                 name: "relevantStations",
-                behavior: WaitForSync.FirstTime,
+                behavior: WaitForSync.Always,
               });
               // subs.add(stations, {
               //   name: "stations",
