@@ -1,8 +1,14 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Divider } from "@rneui/base";
 import { Card, Image } from "@rneui/themed";
-import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, Pressable, StyleSheet } from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  Pressable,
+  StyleSheet,
+} from "react-native";
 import {
   Text as DefaultText,
   View as DefaultView,
@@ -36,12 +42,6 @@ export function ThemedCardWithDrawer(props: {
     drawerClosedLocation,
   } = props;
   const [isOpen, setOpen] = useState(false);
-  const cardProps = {
-    containerStyle: [containerStyle],
-    wrapperStyle: [wrapperStyle],
-  };
-
-  const changeState = () => setOpen((prev) => !prev);
 
   const isButtonBeforeContent =
     (drawerClosedLocation === "left" && !isOpen) ||
@@ -62,30 +62,43 @@ export function ThemedCardWithDrawer(props: {
 
   const isColumn = ["top", "bottom"].includes(drawerClosedLocation);
 
+  const cardProps = {
+    containerStyle: [
+      { overflow: "hidden" as const, padding: 0 },
+      containerStyle,
+    ],
+    wrapperStyle: [wrapperStyle],
+  };
+
+  const slideAnim = useRef(new Animated.Value(0)).current;
+
+  const onClick = () => {
+    Animated.spring(slideAnim, {
+      toValue: isOpen ? 0 : -Dimensions.get("screen").width + 45,
+      useNativeDriver: false,
+      bounciness: 0,
+    }).start();
+    setOpen(!isOpen);
+  };
   return (
     <ThemedCard {...cardProps}>
-      <View
+      <Animated.View
         style={{
           display: "flex",
           flexDirection: isColumn ? "column" : "row",
-          backgroundColor: "lightgreen",
           height: "100%",
+          width: "250%",
+          transform: [
+            {
+              translateX: slideAnim,
+            },
+          ],
         }}
       >
-        {isButtonBeforeContent && (
-          <DrawerButton
-            onPress={() => changeState()}
-            direction={currentLocation}
-          />
-        )}
-        {isOpen ? openChildren : closedChildren}
-        {!isButtonBeforeContent && (
-          <DrawerButton
-            onPress={() => changeState()}
-            direction={currentLocation}
-          />
-        )}
-      </View>
+        {closedChildren}
+        <DrawerButton onPress={onClick} direction={currentLocation} />
+        {openChildren}
+      </Animated.View>
     </ThemedCard>
   );
 }

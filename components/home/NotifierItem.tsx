@@ -23,7 +23,11 @@ export function NotifierItem({ notifier }: { notifier: NotifierSchema }) {
 
   return (
     <ThemedCardWithDrawer
-      containerStyle={{ borderRadius: 10, width: "90%", height: 150 }}
+      containerStyle={{
+        borderRadius: 10,
+        width: Dimensions.get("screen").width - 20,
+        height: 150,
+      }}
       drawerClosedLocation="right"
       openChildren={
         <OpenNotifierItem notifier={notifier} thisStation={thisStation} />

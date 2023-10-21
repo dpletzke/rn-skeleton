@@ -1,6 +1,6 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Divider } from "@rneui/base";
-import { Pressable } from "react-native";
+import { Dimensions, Pressable } from "react-native";
 
 import Colors from "../../constants/Colors";
 import { useThemeColor } from "../../hooks";
@@ -26,7 +26,7 @@ export default function ClosedNotifierItem({ thisStation, notifier }: Props) {
         display: "flex",
         flexDirection: "row",
         height: "100%",
-        flexGrow: 1,
+        width: Dimensions.get("screen").width - 45,
       }}
     >
       <View
@@ -36,11 +36,6 @@ export default function ClosedNotifierItem({ thisStation, notifier }: Props) {
           justifyContent: "center",
           backgroundColor: tierBackground,
           padding: 10,
-          marginTop: -15,
-          marginLeft: -15,
-          marginBottom: -15,
-          borderTopLeftRadius: 10,
-          borderBottomLeftRadius: 10,
           flex: 1,
         }}
       >
@@ -52,6 +47,7 @@ export default function ClosedNotifierItem({ thisStation, notifier }: Props) {
         style={{
           marginLeft: 10,
           flex: 3,
+          paddingVertical: 30,
         }}
       >
         <Text

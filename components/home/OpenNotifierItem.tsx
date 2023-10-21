@@ -1,7 +1,7 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Divider, Switch } from "@rneui/base";
 import { useState } from "react";
-import { Pressable } from "react-native";
+import { Dimensions, Pressable } from "react-native";
 
 import Colors from "../../constants/Colors";
 import { useNotifiers, useThemeColor } from "../../hooks";
@@ -27,7 +27,11 @@ export default function OpenNotifierItem({ thisStation, notifier }: Props) {
   return (
     <View
       style={{
-        flexGrow: 1,
+        width: Dimensions.get("screen").width - 45,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        padding: 30,
       }}
     >
       <View
