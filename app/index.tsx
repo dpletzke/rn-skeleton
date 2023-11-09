@@ -1,22 +1,22 @@
-import { useUser } from "@realm/react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { Alert, Pressable, StyleSheet } from "react-native";
 
+import { NotifierItem, StyledButton, Text, View } from "../components";
 import {
-  NotifierItem,
-  StyledButton,
-  Text,
-  ThemedCard,
-  View,
-} from "../components";
-import { useNotifications, useNotifiers, useStations } from "../hooks";
+  useNotifications,
+  useNotifiers,
+  useStations,
+  useThemeColor,
+} from "../hooks";
 import { requestStation } from "../utils";
 
 export default function HomeScreen() {
   const { upsertStationsFromResponses, stations } = useStations();
   const { notifiers } = useNotifiers();
   const [expoPushToken] = useNotifications();
+  const infoColor = useThemeColor("info");
 
   useEffect(() => {
     const missingStations = notifiers
@@ -68,12 +68,26 @@ export default function HomeScreen() {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <StyledButton
-        title="Create New Alert"
+      <Pressable
         onPress={() => {
           router.push("/(createNotifier)/selectStation");
         }}
-      />
+      >
+        <View
+          style={{
+            width: 50,
+            height: 50,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 2,
+            borderRadius: 40,
+            borderColor: infoColor,
+          }}
+        >
+          <FontAwesome name="plus" size={20} color={infoColor} />
+        </View>
+      </Pressable>
     </View>
   );
 }
